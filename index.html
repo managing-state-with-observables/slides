@@ -9,14 +9,9 @@
 </head>
 <body class="shower list">
 
-	<header class="caption">
-		<h1>Shower Presentation Engine</h1>
-		<p>Yours Truly, Famous Inc.</p>
-	</header>
-
 	<section class="slide" id="cover">
-		<h2>Shower Presentation Engine</h2>
-		<p>Brought to you by <a href="http://pepelsbey.net">Vadim Makeev</a></p>
+		<h2>Managing state with observables</h2>
+		<p>by <a>Stas Ivanov</a></p>
 		<figure>
 			<img class="cover" src="pictures/cover.jpg" alt="Hands on the orange typewriter in a park">
 			<figcaption class="white">
@@ -44,53 +39,89 @@
 	</section>
 
 	<section class="slide">
-		<h2>Shower key features</h2>
-		<ol>
-			<li>Built on HTML, CSS and vanilla JavaScript</li>
-			<li>Works in all modern browsers</li>
-			<li>Themes are separated from engine</li>
-			<li>Modular and extensible</li>
-			<li>Fully keyboard accessible</li>
-			<li>Printable to PDF</li>
-		</ol>
-		<p class="note">Shower ['ʃəuə] noun. A person or thing that shows.</p>
+		<h2>What is observable?</h2>
 	</section>
 
 	<section class="slide">
-		<h2>Plain text on your slides</h2>
-		<p>Lorem ipsum dolor sit amet, consectetur <a href="#4">adipisicing</a> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <em>quis nostrud</em> exercitation ullamco laboris <strong>nisi ut aliquip</strong> ex ea commodo consequat. Duis aute irure <i>dolor</i> in reprehenderit in voluptate velit esse cillum <b>dolore</b> eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in <code>&lt;culpa&gt;</code> qui officia deserunt mollit anim id est laborum.</p>
+		<h2>According to <a href="https://en.wikipedia.org/wiki/Observer_pattern">wikipedia</a>:</h2>
+		<h3>Observer pattern is a software design pattern...</h3>
+		<ul>
+			<li>...in which an object, called the <strong>subject</strong></li>
+			<li>...maintains a list of its dependents, called <strong>observers</strong></li>
+			<li>...and notifies them automatically of any state changes</li>
+		</ul>
+	</section>
+
+	<!-- todo: example from redux source code (symbol-observable) -->
+
+	<section class="slide">
+		<h2>Fundamental pattern for UI</h2>
+		<ul>
+			<li>state is observable</li>
+			<li>view is observer</li>
+			<li>state notifies view of state changes</li>
+		</ul>
 	</section>
 
 	<section class="slide">
-		<h2>Two columns if you like</h2>
-		<p class="double">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
+		<h2>Even in Redux</h2>
+		<pre>
+			<code>function createStore(reducer, preloadedState, enhancer) {</code>
+			<code>...</code>
+			<code>	return {</code>
+			<code>		dispatch, subscribe, getState, replaceReducer,</code>
+			<code>		[$$observable]: observable</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
 	</section>
 
 	<section class="slide">
-		<h2>All kind of lists</h2>
-		<ol>
-			<li>Simple lists are marked with bullets</li>
-			<li>Ordered lists begin with a number</li>
-			<li>You can even nest lists one inside another
-				<ul>
-					<li>Or mix their types</li>
-					<li>But do not go too far</li>
-					<li>Otherwise audience will be bored</li>
-				</ul>
-			</li>
-			<li>Look, seven rows exactly!</li>
-		</ol>
+		<h2>TC39 Proposal</h2>
+		<p>
+			<a href="https://github.com/tc39/proposal-observable">https://github.com/tc39/proposal-observable</a>
+		</p>
+		<ul>
+			<li>Definies APIs for an <code>Observable</code></li>
+			<li>Adds <code>Symbol.observable</code></li>
+			<li>Contains tests to verify any implementation</li>
+		</ul>
 	</section>
 
 	<section class="slide">
-		<h2>Serious citations</h2>
-		<figure>
-			<blockquote>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
-			</blockquote>
-			<figcaption>Marcus Tullius Cicero</figcaption>
-		</figure>
+		<h2>Simplified implementation</h2>
+		<pre>
+			<code>function createObservable() {</code>
+			<code>	const observers = new Set();</code>
+		</pre>
 	</section>
+	
+	<section class="slide">
+		<h2>Simplified implementation</h2>
+		<pre>
+			<code>function subscribe(observer) {</code>
+			<code>	observers.add(observers);</code>
+			<code>	return {</code>
+			<code>		unsubscribe() {</code>
+			<code>			observers.delete(observer) {</code>
+			<code>		}</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>Simplified implementation</h2>
+		<pre>
+			<code>function setValue(nextValue) {</code>
+			<code>	for (const observer of observers) {</code>
+			<code>		observer.next(nextValue)</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+
 
 	<section class="slide">
 		<h2>Code samples</h2>
@@ -192,14 +223,9 @@
 		</style>
 	</section>
 
-	<footer class="badge">
-		<a href="https://github.com/shower/shower">Fork me on GitHub</a>
-	</footer>
-
 	<div class="progress"></div>
 
 	<script src="node_modules/shower-core/shower.min.js"></script>
-	<!-- Copyright © 2018 Yours Truly, Famous Inc. -->
 
 </body>
 </html>
