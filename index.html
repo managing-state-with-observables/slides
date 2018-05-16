@@ -39,7 +39,112 @@
 	</section>
 
 	<section class="slide">
-		<h2>What is observable?</h2>
+		<h2>Who uses <code>setState</code>?</h2>
+		<p>And why not your state management solution?</p>
+	</section>
+
+	<section class="slide">
+		<h2>Simple validation</h2>
+
+		<img
+			style="width: 80%"
+			src="pictures/validation-example.png"
+			alt="single validation example"
+		>
+	</section>
+
+	<section class="slide">
+		<h2>Simple validation: state</h2>
+		<pre>
+			<code>state = {</code>
+			<code>	text: 'text',</code>
+			<code>	isValid: false,</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>Simple validation: sending form</h2>
+		<pre>
+			<code>sendForm(text) {</code>
+			<code>	const isLongEnough = text.length < MINIMUM;</code>
+			<code>	if (isLongEnough) {</code>
+			<code>		// make an async API call and close form</code>
+			<code>	} else {</code>
+			<code>		this.setState({ isValid: false })</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>APIs</h2>
+		<ul>
+			<li>an API to update data: <code>setState</code></li>
+			<li>an API to re-render UI on data update: React standard API</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>A slightly more complex example?</h2>
+		<img
+			style="width: 80%"
+			class="next"
+			src="pictures/multiple-validation.png"
+			alt="multiple fields validation"
+		>
+	</section>
+
+
+
+	<section class="slide">
+		<h2>State in parent component</h2>
+		<code>
+			<pre>state = {</pre>
+			<pre>	0: { isValid: true, text: '' }</pre>
+			<pre>	1: { isValid: true, text: '' }</pre>
+			<pre>	...</pre>
+			<pre>	9: { isValid: true, text: '' }</pre>
+			<pre>}</pre>
+		</code>
+	</section>
+
+	<section class="slide">
+		<h2>State in parent component: modifying</h2>
+		<pre>
+			<code>this.setState(prevState => {</code>
+			<code>	const modified = Object.assign(</code>
+			<code>		{},</code>
+			<code>		prevState[index],</code>
+			<code>		{ isValid: true },</code>
+			<code>	);</code>
+			<code>	return { [index]: modified }</code>
+			<code>})</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>10 components?</h2>
+		<p>What if we create 10 components managing their own state</p>
+		<p>Can't extract state from child components</p>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">What if we could extract state?</h2>
+	</section>
+
+	<section class="slide">
+		<h2>We need something like <code>setState</code> that...</h2>
+		<ul>
+			<li>...has an API to change data it holds</li>
+			<li>...given to consumer (child component), can notify it about data changes</li>
+			<li>...in any moment of time, can give us current data it holding</li>
+		</ul>
+		<p></p>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">An Observable</h2>
 	</section>
 
 	<section class="slide">
@@ -52,7 +157,6 @@
 		</ul>
 	</section>
 
-	<!-- todo: example from redux source code (symbol-observable) -->
 
 	<section class="slide">
 		<h2>Fundamental pattern for UI</h2>
@@ -95,7 +199,7 @@
 			<code>	const observers = new Set();</code>
 		</pre>
 	</section>
-	
+
 	<section class="slide">
 		<h2>Simplified implementation</h2>
 		<pre>
@@ -122,7 +226,6 @@
 	</section>
 
 
-
 	<section class="slide">
 		<h2>Code samples</h2>
 		<pre>
@@ -134,43 +237,6 @@
 			<code>    &lt;link rel="stylesheet" href="screen.css"&gt;</code>
 			<code><mark>&lt;/head&gt;</mark></code>
 		</pre>
-	</section>
-
-	<section class="slide">
-		<h2>Even tables</h2>
-		<table>
-		<tr>
-			<th scope="col">Locavore</th>
-			<th>Umami</th>
-			<th>Helvetica</th>
-			<th>Vegan</th>
-		</tr>
-		<tr>
-			<th scope="row">Fingerstache</th>
-			<td>Kale</td>
-			<td>Chips</td>
-			<td>Keytar</td>
-		</tr>
-		<tr>
-			<th scope="row">Sriracha</th>
-			<td>Gluten-free</td>
-			<td>Ennui</td>
-			<td>Keffiyeh</td>
-		</tr>
-		<tr>
-			<th scope="row">Thundercats</th>
-			<td>Jean</td>
-			<td>Shorts</td>
-			<td>Biodiesel</td>
-		</tr>
-		<tr>
-			<th scope="row">Terry</th>
-			<td>Richardson</td>
-			<td>Swag</td>
-			<td>Blog</td>
-		</tr>
-		</table>
-		<p>It’s good to have information organized.</p>
 	</section>
 
 	<section class="slide" id="picture">
@@ -207,21 +273,8 @@
 		<h2>All nicely aligned to grid</h2>
 	</section>
 
-	<section class="slide" id="see-more">
-		<h2 class="shout">
-			<img src="pictures/logo.svg" alt="Shower logo">
-			<a href="https://github.com/shower/shower">See more on GitHub</a>
-		</h2>
-		<style>
-			#see-more h2 {
-				font-size:100px
-				}
-			#see-more img {
-				width:0.72em;
-				height:0.72em;
-				}
-		</style>
-	</section>
+
+	<!--todo: why not MobX-->
 
 	<div class="progress"></div>
 
