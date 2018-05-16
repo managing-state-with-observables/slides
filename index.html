@@ -78,14 +78,6 @@
 	</section>
 
 	<section class="slide">
-		<h2>APIs</h2>
-		<ul>
-			<li>an API to update data: <code>setState</code></li>
-			<li>an API to re-render UI on data update: React standard API</li>
-		</ul>
-	</section>
-
-	<section class="slide">
 		<h2>A slightly more complex example?</h2>
 		<img
 			style="width: 80%"
@@ -96,17 +88,16 @@
 	</section>
 
 
-
 	<section class="slide">
 		<h2>State in parent component</h2>
-		<code>
-			<pre>state = {</pre>
-			<pre>	0: { isValid: true, text: '' }</pre>
-			<pre>	1: { isValid: true, text: '' }</pre>
-			<pre>	...</pre>
-			<pre>	9: { isValid: true, text: '' }</pre>
-			<pre>}</pre>
-		</code>
+		<pre>
+			<code>state = {</code>
+			<code>	0: { isValid: true, text: '' },</code>
+			<code>	1: { isValid: true, text: '' },</code>
+			<code>	...</code>
+			<code>	9: { isValid: true, text: '' },</code>
+			<code>}</code>
+		</pre>
 	</section>
 
 	<section class="slide">
@@ -124,21 +115,33 @@
 	</section>
 
 	<section class="slide">
-		<h2>10 components?</h2>
-		<p>What if we create 10 components managing their own state</p>
-		<p>Can't extract state from child components</p>
+		<h2>10 child components managing their own state?</h2>
+		<pre>
+			<code>[0, 1, 2, ... 9].map(index => (</code>
+			<code>	&lt;Component key={index} /&gt;</code>
+			<code>)</code>
+		</pre>
 	</section>
 
 	<section class="slide">
-		<h2 class="shout shrink">What if we could extract state?</h2>
+		<h2 class="shout shrink">We can't extract state from child components</h2>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">But what if we could extract state?</h2>
 	</section>
 
 	<section class="slide">
 		<h2>We need something like <code>setState</code> that...</h2>
 		<ul>
-			<li>...has an API to change data it holds</li>
-			<li>...given to consumer (child component), can notify it about data changes</li>
-			<li>...in any moment of time, can give us current data it holding</li>
+			<li>...has an API to change data it holds (like <code>setState(nextValue)</code>)</li>
+			<li>...given to consumer (child component),
+				can notify it about data changes
+				(like React re-renders component after <code>setState</code>)
+			</li>
+			<li>...in any moment of time, can give us current data it holding
+				(like accessing <code>this.state</code>)
+			</li>
 		</ul>
 		<p></p>
 	</section>
@@ -186,92 +189,46 @@
 			<a href="https://github.com/tc39/proposal-observable">https://github.com/tc39/proposal-observable</a>
 		</p>
 		<ul>
-			<li>Definies APIs for an <code>Observable</code></li>
+			<li>Defines APIs for an <code>Observable</code></li>
 			<li>Adds <code>Symbol.observable</code></li>
 			<li>Contains tests to verify any implementation</li>
 		</ul>
 	</section>
+	<!--
+        <section class="slide">
+            <h2>Simplified implementation</h2>
+            <pre>
+                <code>function createObservable() {</code>
+                <code>	const observers = new Set();</code>
+            </pre>
+        </section>
 
-	<section class="slide">
-		<h2>Simplified implementation</h2>
-		<pre>
-			<code>function createObservable() {</code>
-			<code>	const observers = new Set();</code>
-		</pre>
-	</section>
+        <section class="slide">
+            <h2>Simplified implementation</h2>
+            <h3>(non-complaint to specification)</h3>
+            <pre>
+                <code>function subscribe(observer) {</code>
+                <code>	observers.add(observers);</code>
+                <code>	return {</code>
+                <code>		unsubscribe() {</code>
+                <code>			observers.delete(observer) {</code>
+                <code>		}</code>
+                <code>	}</code>
+                <code>}</code>
+            </pre>
+        </section>
 
-	<section class="slide">
-		<h2>Simplified implementation</h2>
-		<pre>
-			<code>function subscribe(observer) {</code>
-			<code>	observers.add(observers);</code>
-			<code>	return {</code>
-			<code>		unsubscribe() {</code>
-			<code>			observers.delete(observer) {</code>
-			<code>		}</code>
-			<code>	}</code>
-			<code>}</code>
-		</pre>
-	</section>
-
-	<section class="slide">
-		<h2>Simplified implementation</h2>
-		<pre>
-			<code>function setValue(nextValue) {</code>
-			<code>	for (const observer of observers) {</code>
-			<code>		observer.next(nextValue)</code>
-			<code>	}</code>
-			<code>}</code>
-		</pre>
-	</section>
-
-
-	<section class="slide">
-		<h2>Code samples</h2>
-		<pre>
-			<code>&lt;!DOCTYPE html&gt;</code>
-			<code class="mark">&lt;html lang="en"&gt;</code>
-			<code><mark>&lt;head&gt;</mark> <span class="comment">&lt;!--Comment--&gt;</span></code>
-			<code>    &lt;title&gt;Shower&lt;/title&gt;</code>
-			<code>    &lt;meta charset="<mark class="important">UTF-8</mark>"&gt;</code>
-			<code>    &lt;link rel="stylesheet" href="screen.css"&gt;</code>
-			<code><mark>&lt;/head&gt;</mark></code>
-		</pre>
-	</section>
-
-	<section class="slide" id="picture">
-		<h2>Pictures</h2>
-		<figure>
-			<img class="cover" src="pictures/picture.jpg" alt="Orange typewriter on a wooden table close-up">
-			<figcaption class="white">
-				<a href="http://fiftyfootshadows.net/">© John Carey</a>
-			</figcaption>
-		</figure>
-		<style>
-			#picture h2 {
-				color:#FFF;
-				}
-		</style>
-	</section>
-
-	<section class="slide">
-		<h2 class="shout shrink">You can even shout this way</h2>
-	</section>
-
-	<section class="slide">
-		<h2>Inner navigation</h2>
-		<ol>
-			<li>Lets you reveal list items one by one</li>
-			<li class="next">To keep some key points</li>
-			<li class="next">In secret from audience</li>
-			<li class="next">But it will work only once</li>
-			<li class="next">Nobody wants to see the same joke twice</li>
-		</ol>
-	</section>
-
-	<section class="slide grid">
-		<h2>All nicely aligned to grid</h2>
-	</section>
+        <section class="slide">
+            <h2>Simplified implementation</h2>
+            <pre>
+                <code>function setValue(nextValue) {</code>
+                <code>	for (const observer of observers) {</code>
+                <code>		observer.next(nextValue)</code>
+                <code>	}</code>
+                <code>}</code>
+            </pre>
+        </section>
+    -->
 
 
 	<!--todo: why not MobX-->
