@@ -105,7 +105,7 @@ gulp.task('serve', () => {
 	browserSync.init({
 		ui: false,
 		notify: false,
-		port: 3000,
+		port: 8000,
 		server: {
 			baseDir: '.'
 		}

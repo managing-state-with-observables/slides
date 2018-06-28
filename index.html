@@ -39,7 +39,115 @@
 	</section>
 
 	<section class="slide">
-		<h2>What is observable?</h2>
+		<h2>Who uses <code>setState</code>?</h2>
+		<p>And why not your state management solution?</p>
+	</section>
+
+	<section class="slide">
+		<h2>Simple validation</h2>
+
+		<img
+			style="width: 80%"
+			src="pictures/validation-example.png"
+			alt="single validation example"
+		>
+	</section>
+
+	<section class="slide">
+		<h2>Simple validation: state</h2>
+		<pre>
+			<code>state = {</code>
+			<code>	text: 'text',</code>
+			<code>	isValid: false,</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>Simple validation: sending form</h2>
+		<pre>
+			<code>sendForm(text) {</code>
+			<code>	const isLongEnough = text.length < MINIMUM;</code>
+			<code>	if (isLongEnough) {</code>
+			<code>		// make an async API call and close form</code>
+			<code>	} else {</code>
+			<code>		this.setState({ isValid: false })</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>A slightly more complex example?</h2>
+		<img
+			style="width: 80%"
+			class="next"
+			src="pictures/multiple-validation.png"
+			alt="multiple fields validation"
+		>
+	</section>
+
+
+	<section class="slide">
+		<h2>State in parent component</h2>
+		<pre>
+			<code>state = {</code>
+			<code>	0: { isValid: true, text: '' },</code>
+			<code>	1: { isValid: true, text: '' },</code>
+			<code>	...</code>
+			<code>	9: { isValid: true, text: '' },</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>State in parent component: modifying</h2>
+		<pre>
+			<code>this.setState(prevState => {</code>
+			<code>	const modified = Object.assign(</code>
+			<code>		{},</code>
+			<code>		prevState[index],</code>
+			<code>		{ isValid: true },</code>
+			<code>	);</code>
+			<code>	return { [index]: modified }</code>
+			<code>})</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>10 child components managing their own state?</h2>
+		<pre>
+			<code>[0, 1, 2, ... 9].map(index => (</code>
+			<code>	&lt;Component key={index} /&gt;</code>
+			<code>)</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">We can't extract state from child components</h2>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">But what if we could extract state?</h2>
+	</section>
+
+	<section class="slide">
+		<h2>We need something like <code>setState</code> that...</h2>
+		<ul>
+			<li>...has an API to change data it holds (like <code>setState(nextValue)</code>)</li>
+			<li>...given to consumer (child component),
+				can notify it about data changes
+				(like React re-renders component after <code>setState</code>)
+			</li>
+			<li>...in any moment of time, can give us current data it holding
+				(like accessing <code>this.state</code>)
+			</li>
+		</ul>
+		<p></p>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">An Observable</h2>
 	</section>
 
 	<section class="slide">
@@ -52,7 +160,6 @@
 		</ul>
 	</section>
 
-	<!-- todo: example from redux source code (symbol-observable) -->
 
 	<section class="slide">
 		<h2>Fundamental pattern for UI</h2>
@@ -82,146 +189,153 @@
 			<a href="https://github.com/tc39/proposal-observable">https://github.com/tc39/proposal-observable</a>
 		</p>
 		<ul>
-			<li>Definies APIs for an <code>Observable</code></li>
+			<li>Defines APIs for an <code>Observable</code></li>
 			<li>Adds <code>Symbol.observable</code></li>
 			<li>Contains tests to verify any implementation</li>
 		</ul>
 	</section>
+	<!--
+        <section class="slide">
+            <h2>Simplified implementation</h2>
+            <pre>
+                <code>function createObservable() {</code>
+                <code>	const observers = new Set();</code>
+            </pre>
+        </section>
+
+        <section class="slide">
+            <h2>Simplified implementation</h2>
+            <h3>(non-complaint to specification)</h3>
+            <pre>
+                <code>function subscribe(observer) {</code>
+                <code>	observers.add(observers);</code>
+                <code>	return {</code>
+                <code>		unsubscribe() {</code>
+                <code>			observers.delete(observer) {</code>
+                <code>		}</code>
+                <code>	}</code>
+                <code>}</code>
+            </pre>
+        </section>
+
+        <section class="slide">
+            <h2>Simplified implementation</h2>
+            <pre>
+                <code>function setValue(nextValue) {</code>
+                <code>	for (const observer of observers) {</code>
+                <code>		observer.next(nextValue)</code>
+                <code>	}</code>
+                <code>}</code>
+            </pre>
+        </section>
+    -->
 
 	<section class="slide">
-		<h2>Simplified implementation</h2>
+		<h2>All examples are available at github.com</h2>
+		<p>
+			<a href="https://github.com/managing-state-with-observables/examples">
+				https://github.com/managing-state-with-observables/examples
+			</a>
+		</p>
+	</section>
+
+	<section class="slide">
+		<h2>API by specification</h2>
+		<code>/observable-api</code>
+	</section>
+
+	<section class="slide">
+		<h2>Pushing data to observable</h2>
+		<code>/bs-api</code>
+	</section>
+
+
+	<section class="slide">
+		<h2>Rendering observable in React</h2>
+		<ul>
+			<li>subscribe on component creation</li>
+			<li>unsubscribe on component disposal</li>
+			<li>re-render component when new value comes from the observable</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>We need a generic component</h2>
+		<p>
+			<a href="https://github.com/ivstas/react-track-observable">
+				https://github.com/ivstas/react-track-observable
+			</a>
+		</p>
 		<pre>
-			<code>function createObservable() {</code>
-			<code>	const observers = new Set();</code>
+			<code>{observable::track(value => (</code>
+			<code>	&lt;strong&gt;{value}&lt;/strong&gt;</code>
+			<code>))}</code>
 		</pre>
 	</section>
-	
+
 	<section class="slide">
-		<h2>Simplified implementation</h2>
-		<pre>
-			<code>function subscribe(observer) {</code>
-			<code>	observers.add(observers);</code>
-			<code>	return {</code>
-			<code>		unsubscribe() {</code>
-			<code>			observers.delete(observer) {</code>
-			<code>		}</code>
-			<code>	}</code>
-			<code>}</code>
-		</pre>
+		<h2>Rendering in react</h2>
+		<p>
+			<code>/react</code>
+		</p>
+
 	</section>
 
 	<section class="slide">
-		<h2>Simplified implementation</h2>
-		<pre>
-			<code>function setValue(nextValue) {</code>
-			<code>	for (const observer of observers) {</code>
-			<code>		observer.next(nextValue)</code>
-			<code>	}</code>
-			<code>}</code>
-		</pre>
-	</section>
+		<h2>Rendering in react</h2>
+		<p>
+			<code>/track-primitives</code>
+		</p>
 
-
-
-	<section class="slide">
-		<h2>Code samples</h2>
-		<pre>
-			<code>&lt;!DOCTYPE html&gt;</code>
-			<code class="mark">&lt;html lang="en"&gt;</code>
-			<code><mark>&lt;head&gt;</mark> <span class="comment">&lt;!--Comment--&gt;</span></code>
-			<code>    &lt;title&gt;Shower&lt;/title&gt;</code>
-			<code>    &lt;meta charset="<mark class="important">UTF-8</mark>"&gt;</code>
-			<code>    &lt;link rel="stylesheet" href="screen.css"&gt;</code>
-			<code><mark>&lt;/head&gt;</mark></code>
-		</pre>
+		<p>You can write your helper functions exploiting<code>::</code></p>
 	</section>
 
 	<section class="slide">
-		<h2>Even tables</h2>
-		<table>
-		<tr>
-			<th scope="col">Locavore</th>
-			<th>Umami</th>
-			<th>Helvetica</th>
-			<th>Vegan</th>
-		</tr>
-		<tr>
-			<th scope="row">Fingerstache</th>
-			<td>Kale</td>
-			<td>Chips</td>
-			<td>Keytar</td>
-		</tr>
-		<tr>
-			<th scope="row">Sriracha</th>
-			<td>Gluten-free</td>
-			<td>Ennui</td>
-			<td>Keffiyeh</td>
-		</tr>
-		<tr>
-			<th scope="row">Thundercats</th>
-			<td>Jean</td>
-			<td>Shorts</td>
-			<td>Biodiesel</td>
-		</tr>
-		<tr>
-			<th scope="row">Terry</th>
-			<td>Richardson</td>
-			<td>Swag</td>
-			<td>Blog</td>
-		</tr>
-		</table>
-		<p>It’s good to have information organized.</p>
-	</section>
-
-	<section class="slide" id="picture">
-		<h2>Pictures</h2>
-		<figure>
-			<img class="cover" src="pictures/picture.jpg" alt="Orange typewriter on a wooden table close-up">
-			<figcaption class="white">
-				<a href="http://fiftyfootshadows.net/">© John Carey</a>
-			</figcaption>
-		</figure>
-		<style>
-			#picture h2 {
-				color:#FFF;
-				}
-		</style>
+		<h2>Combining with events</h2>
+		<p>
+			<code>/combine</code>
+		</p>
 	</section>
 
 	<section class="slide">
-		<h2 class="shout shrink">You can even shout this way</h2>
+		<h2>What if we put <code>next</code> API inside?</h2>
+		<p>
+			<code>/search</code>
+		</p>
 	</section>
 
 	<section class="slide">
-		<h2>Inner navigation</h2>
-		<ol>
-			<li>Lets you reveal list items one by one</li>
-			<li class="next">To keep some key points</li>
-			<li class="next">In secret from audience</li>
-			<li class="next">But it will work only once</li>
-			<li class="next">Nobody wants to see the same joke twice</li>
-		</ol>
+		<h2>TODO list</h2>
+		<p>
+			<code>/todo</code>
+		</p>
+		<p class="next">
+			slightly difficult?
+		</p>
 	</section>
 
-	<section class="slide grid">
-		<h2>All nicely aligned to grid</h2>
+	<section class="slide">
+		<h2>Should I use it?</h2>
+		<ul>
+			<li>Highly experimental</li>
+			<li>RxJS is ... complex</li>
+		</ul>
 	</section>
 
-	<section class="slide" id="see-more">
-		<h2 class="shout">
-			<img src="pictures/logo.svg" alt="Shower logo">
-			<a href="https://github.com/shower/shower">See more on GitHub</a>
-		</h2>
-		<style>
-			#see-more h2 {
-				font-size:100px
-				}
-			#see-more img {
-				width:0.72em;
-				height:0.72em;
-				}
-		</style>
+	<section class="slide">
+		<h2>So why is it worth my time?</h2>
 	</section>
+
+	<section class="slide">
+		<h2>Thank you</h2>
+		<p>
+			<a href="https://github.com/managing-state-with-observables">
+				https://github.com/managing-state-with-observables
+			</a>
+		</p>
+	</section>
+
+	<!--todo: why not MobX-->
 
 	<div class="progress"></div>
 
