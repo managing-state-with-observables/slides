@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Shower Presentation Engine</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="shower/themes/ribbon/styles/screen-16x10.css">
+</head>
+<body class="shower list">
+
+	<section class="slide" id="cover">
+		<h2>Managing state with observables</h2>
+		<p>by <a>Stas Ivanov</a></p>
+		<figure>
+			<img class="cover" src="pictures/cover.jpg" alt="Hands on the orange typewriter in a park">
+			<figcaption class="white">
+				<a href="http://fiftyfootshadows.net/">© John Carey</a>
+			</figcaption>
+		</figure>
+		<style>
+			#cover h2 {
+				margin:30px 0 0;
+				color:#FFF;
+				text-align:center;
+				font-size:70px;
+				}
+			#cover p {
+				margin:10px 0 0;
+				text-align:center;
+				color:#FFF;
+				font-style:italic;
+				font-size:20px;
+				}
+				#cover p a {
+					color:#FFF;
+					}
+		</style>
+	</section>
+
+	<section class="slide">
+		<h2>What is observable?</h2>
+	</section>
+
+	<section class="slide">
+		<h2>According to <a href="https://en.wikipedia.org/wiki/Observer_pattern">wikipedia</a>:</h2>
+		<h3>Observer pattern is a software design pattern...</h3>
+		<ul>
+			<li>...in which an object, called the <strong>subject</strong></li>
+			<li>...maintains a list of its dependents, called <strong>observers</strong></li>
+			<li>...and notifies them automatically of any state changes</li>
+		</ul>
+	</section>
+
+	<!-- todo: example from redux source code (symbol-observable) -->
+
+	<section class="slide">
+		<h2>Fundamental pattern for UI</h2>
+		<ul>
+			<li>state is observable</li>
+			<li>view is observer</li>
+			<li>state notifies view of state changes</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>Even in Redux</h2>
+		<pre>
+			<code>function createStore(reducer, preloadedState, enhancer) {</code>
+			<code>...</code>
+			<code>	return {</code>
+			<code>		dispatch, subscribe, getState, replaceReducer,</code>
+			<code>		[$$observable]: observable</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>TC39 Proposal</h2>
+		<p>
+			<a href="https://github.com/tc39/proposal-observable">https://github.com/tc39/proposal-observable</a>
+		</p>
+		<ul>
+			<li>Definies APIs for an <code>Observable</code></li>
+			<li>Adds <code>Symbol.observable</code></li>
+			<li>Contains tests to verify any implementation</li>
+		</ul>
+	</section>
+
+	<section class="slide">
+		<h2>Simplified implementation</h2>
+		<pre>
+			<code>function createObservable() {</code>
+			<code>	const observers = new Set();</code>
+		</pre>
+	</section>
+	
+	<section class="slide">
+		<h2>Simplified implementation</h2>
+		<pre>
+			<code>function subscribe(observer) {</code>
+			<code>	observers.add(observers);</code>
+			<code>	return {</code>
+			<code>		unsubscribe() {</code>
+			<code>			observers.delete(observer) {</code>
+			<code>		}</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>Simplified implementation</h2>
+		<pre>
+			<code>function setValue(nextValue) {</code>
+			<code>	for (const observer of observers) {</code>
+			<code>		observer.next(nextValue)</code>
+			<code>	}</code>
+			<code>}</code>
+		</pre>
+	</section>
+
+
+
+	<section class="slide">
+		<h2>Code samples</h2>
+		<pre>
+			<code>&lt;!DOCTYPE html&gt;</code>
+			<code class="mark">&lt;html lang="en"&gt;</code>
+			<code><mark>&lt;head&gt;</mark> <span class="comment">&lt;!--Comment--&gt;</span></code>
+			<code>    &lt;title&gt;Shower&lt;/title&gt;</code>
+			<code>    &lt;meta charset="<mark class="important">UTF-8</mark>"&gt;</code>
+			<code>    &lt;link rel="stylesheet" href="screen.css"&gt;</code>
+			<code><mark>&lt;/head&gt;</mark></code>
+		</pre>
+	</section>
+
+	<section class="slide">
+		<h2>Even tables</h2>
+		<table>
+		<tr>
+			<th scope="col">Locavore</th>
+			<th>Umami</th>
+			<th>Helvetica</th>
+			<th>Vegan</th>
+		</tr>
+		<tr>
+			<th scope="row">Fingerstache</th>
+			<td>Kale</td>
+			<td>Chips</td>
+			<td>Keytar</td>
+		</tr>
+		<tr>
+			<th scope="row">Sriracha</th>
+			<td>Gluten-free</td>
+			<td>Ennui</td>
+			<td>Keffiyeh</td>
+		</tr>
+		<tr>
+			<th scope="row">Thundercats</th>
+			<td>Jean</td>
+			<td>Shorts</td>
+			<td>Biodiesel</td>
+		</tr>
+		<tr>
+			<th scope="row">Terry</th>
+			<td>Richardson</td>
+			<td>Swag</td>
+			<td>Blog</td>
+		</tr>
+		</table>
+		<p>It’s good to have information organized.</p>
+	</section>
+
+	<section class="slide" id="picture">
+		<h2>Pictures</h2>
+		<figure>
+			<img class="cover" src="pictures/picture.jpg" alt="Orange typewriter on a wooden table close-up">
+			<figcaption class="white">
+				<a href="http://fiftyfootshadows.net/">© John Carey</a>
+			</figcaption>
+		</figure>
+		<style>
+			#picture h2 {
+				color:#FFF;
+				}
+		</style>
+	</section>
+
+	<section class="slide">
+		<h2 class="shout shrink">You can even shout this way</h2>
+	</section>
+
+	<section class="slide">
+		<h2>Inner navigation</h2>
+		<ol>
+			<li>Lets you reveal list items one by one</li>
+			<li class="next">To keep some key points</li>
+			<li class="next">In secret from audience</li>
+			<li class="next">But it will work only once</li>
+			<li class="next">Nobody wants to see the same joke twice</li>
+		</ol>
+	</section>
+
+	<section class="slide grid">
+		<h2>All nicely aligned to grid</h2>
+	</section>
+
+	<section class="slide" id="see-more">
+		<h2 class="shout">
+			<img src="pictures/logo.svg" alt="Shower logo">
+			<a href="https://github.com/shower/shower">See more on GitHub</a>
+		</h2>
+		<style>
+			#see-more h2 {
+				font-size:100px
+				}
+			#see-more img {
+				width:0.72em;
+				height:0.72em;
+				}
+		</style>
+	</section>
+
+	<div class="progress"></div>
+
+	<script src="shower/shower.min.js"></script>
+
+</body>
+</html>
